@@ -62,13 +62,51 @@ void renumberImageSequence(const std::string& directoryPath) {
 }
 
 
-int main() {
-    std::string directoryPath;
+int main(int argc, char* argv[]) {
+    // Get the program's path and directory
+    std::string programPath = argv[0];
+    std::string programDirectory = fs::path(programPath).parent_path().string();
+    std::string programFolder = fs::path(programPath).filename().string();
     
-    std::cout << "Enter the directory path: ";
-    std::getline(std::cin, directoryPath);
+    // Display menu options
+    std::cout << "Select an option:\n";
+    std::cout << "1. Enter a directory path\n";
+    std::cout << "2. Use current directory (" << programFolder << ")\n";
+    std::cout << "3. Exit the program\n";
+    std::cout << "Enter option number: ";
 
-    // Call the renumbering function with the provided directory path
+    int option;
+    std::cin >> option;
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+    std::string directoryPath;
+
+    switch (option) {
+        case 1: {
+            std::cout << "Enter directory path: ";
+            std::getline(std::cin, directoryPath);
+            break;
+        }
+        case 2: {
+            directoryPath = programDirectory;
+            break;
+        }
+        case 3:{
+            exit(1);
+        }
+        default: {
+            std::cout << "Invalid option. Exiting the program.\n";
+            return 0;
+        }
+    }
+    // Get the folder path from the directory path
+    std::string folderPath = fs::path(directoryPath).filename().string();
+   
+    // Display selected directory and folder path
+    std::cout << "Running the program for directory: " << directoryPath << '\n';
+    std::cout << "Folder path: " << folderPath << '\n';
+   
+    // Call the function to renumber image sequence
     renumberImageSequence(directoryPath);
 
     return 0;
